@@ -1,0 +1,11 @@
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="preference_api_key"
+        android:title="@string/preference_api_key"
+        app:useSimpleSummaryProvider="true"
+        android:dialogTitle="@string/preference_api_key_title"/>
+    android:summary="@string/preference_api_key_summary" />
+
+</androidx.preference.PreferenceScreen>
