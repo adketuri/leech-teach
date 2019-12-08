@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import net.alcuria.review.R;
-import net.alcuria.review.util.PrefUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +19,5 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        PrefUtil.getInstance(getActivity()).registerOnSharedPreferenceChangedListener(this);
-
     }
 }
