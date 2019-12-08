@@ -1,9 +1,13 @@
 package net.alcuria.review.ui.settings;
 
 import android.os.Bundle;
+import android.view.View;
 
 import net.alcuria.review.R;
+import net.alcuria.review.util.PrefUtil;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceFragmentCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -13,4 +17,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.pref_screen, rootKey);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        PrefUtil.getInstance(getActivity()).registerOnSharedPreferenceChangedListener(this);
+
+    }
 }

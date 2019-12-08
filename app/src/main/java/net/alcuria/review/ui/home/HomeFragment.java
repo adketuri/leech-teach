@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.annotation.Nullable;
+
+import net.alcuria.review.R;
+import net.alcuria.review.util.PrefUtil;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import net.alcuria.review.R;
 
 public class HomeFragment extends Fragment {
 
@@ -18,6 +21,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel.setApiKey(PrefUtil.getInstance(getContext()).apiKey());
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(this, new Observer<String>() {
@@ -28,4 +32,5 @@ public class HomeFragment extends Fragment {
         });
         return root;
     }
+
 }
