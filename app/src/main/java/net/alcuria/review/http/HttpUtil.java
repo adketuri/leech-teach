@@ -4,7 +4,8 @@ import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import net.alcuria.review.http.models.SubjectResponse;
+import net.alcuria.review.http.models.ResponseData;
+import net.alcuria.review.http.models.Subject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,17 +37,17 @@ public class HttpUtil {
         return sInstance;
     }
 
-    public void getSubjects(final ResponseListener<SubjectResponse> listener, String key) {
-        Call<SubjectResponse> call = mRetrofit.create(WaniKaniApi.class).getSubjects("Bearer " + key);
-        call.enqueue(new Callback<SubjectResponse>() {
+    public void getSubjects(final ResponseListener<ResponseData<Subject>> listener, String key) {
+        Call<ResponseData<Subject>> call = mRetrofit.create(WaniKaniApi.class).getSubjects("Bearer " + key);
+        call.enqueue(new Callback<ResponseData<Subject>>() {
             @Override
-            public void onResponse(Call<SubjectResponse> call, Response<SubjectResponse> response) {
+            public void onResponse(Call<ResponseData<Subject>> call, Response<ResponseData<Subject>> response) {
                 Log.i("Http", "Got response call");
                 listener.invoke(response.body());
             }
 
             @Override
-            public void onFailure(Call<SubjectResponse> call, Throwable t) {
+            public void onFailure(Call<ResponseData<Subject>> call, Throwable t) {
                 Log.e("Http", "getSubjects failure");
                 t.printStackTrace();
             }
@@ -55,7 +56,7 @@ public class HttpUtil {
 
     public interface WaniKaniApi {
         @GET("subjects/")
-        Call<SubjectResponse> getSubjects(@Header("Authorization") String auth);
+        Call<ResponseData<Subject>> getSubjects(@Header("Authorization") String auth);
     }
 
 //    public void fetchSubjects(CompositeDisposable compositeDisposable){

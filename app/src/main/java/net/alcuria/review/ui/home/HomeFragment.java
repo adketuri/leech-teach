@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.alcuria.review.R;
-import net.alcuria.review.http.models.SubjectResponse;
+import net.alcuria.review.http.models.ResponseData;
+import net.alcuria.review.http.models.Subject;
 import net.alcuria.review.util.PrefUtil;
 
 import androidx.annotation.NonNull;
@@ -37,11 +38,11 @@ public class HomeFragment extends Fragment {
             }
         });
         final TextView responseView = root.findViewById(R.id.text_response);
-        homeViewModel.getSubjectResponse(PrefUtil.getInstance(getContext()).apiKey()).observe(this, new Observer<SubjectResponse>() {
+        homeViewModel.getSubjectResponse(PrefUtil.getInstance(getContext()).apiKey()).observe(this, new Observer<ResponseData<Subject>>() {
             @Override
-            public void onChanged(SubjectResponse subjectResponse) {
+            public void onChanged(ResponseData<Subject> subjectResponse) {
                 Log.i("Home", "Got some response");
-                responseView.setText(subjectResponse.toString());
+                responseView.setText(String.valueOf(subjectResponse.totalCount));
             }
         });
         return root;

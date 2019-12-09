@@ -4,7 +4,8 @@ import android.util.Log;
 
 import net.alcuria.review.http.HttpUtil;
 import net.alcuria.review.http.ResponseListener;
-import net.alcuria.review.http.models.SubjectResponse;
+import net.alcuria.review.http.models.ResponseData;
+import net.alcuria.review.http.models.Subject;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,7 +21,7 @@ import androidx.lifecycle.ViewModel;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
-    private MutableLiveData<SubjectResponse> mSubjectResponse;
+    private MutableLiveData<ResponseData<Subject>> mSubjectResponse;
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -31,7 +32,7 @@ public class HomeViewModel extends ViewModel {
         return mText;
     }
 
-    public LiveData<SubjectResponse> getSubjectResponse(String key) {
+    public LiveData<ResponseData<Subject>> getSubjectResponse(String key) {
         if (mSubjectResponse == null) {
             mSubjectResponse = new MutableLiveData<>();
             loadSubjects(key);
@@ -41,9 +42,9 @@ public class HomeViewModel extends ViewModel {
 
     private void loadSubjects(String key) {
         Log.i("Home", "Loading subjects");
-        HttpUtil.getInstance().getSubjects(new ResponseListener<SubjectResponse>() {
+        HttpUtil.getInstance().getSubjects(new ResponseListener<ResponseData<Subject>>() {
             @Override
-            public void invoke(SubjectResponse response) {
+            public void invoke(ResponseData<Subject> response) {
                 mSubjectResponse.setValue(response);
             }
         }, key);
