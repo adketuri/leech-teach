@@ -26,8 +26,9 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        PrefUtil.init(getContext()); //TODO: where is the best place for this?
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        homeViewModel.setApiKey(PrefUtil.getInstance(getContext()).apiKey());
+        homeViewModel.setApiKey(PrefUtil.getInstance().apiKey());
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
         Log.i("Home", "Creating home view");
@@ -38,10 +39,9 @@ public class HomeFragment extends Fragment {
             }
         });
         final TextView responseView = root.findViewById(R.id.text_response);
-        homeViewModel.getSubjectResponse(PrefUtil.getInstance(getContext()).apiKey()).observe(this, new Observer<ResponseData<Subject>>() {
+        homeViewModel.getSubjectResponse(PrefUtil.getInstance().apiKey()).observe(this, new Observer<ResponseData<Subject>>() {
             @Override
             public void onChanged(ResponseData<Subject> subjectResponse) {
-                Log.i("Home", "Got some response");
                 responseView.setText(String.valueOf(subjectResponse.totalCount));
             }
         });

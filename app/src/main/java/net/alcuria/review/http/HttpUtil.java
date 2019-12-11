@@ -1,70 +1,65 @@
 package net.alcuria.review.http;
 
-import android.util.Log;
-
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import net.alcuria.review.http.models.ResponseData;
 import net.alcuria.review.http.models.Subject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 
 public class HttpUtil {
 
     public static final String ENDPOINT = "https://api.wanikani.com/v2/";
 
-    private static HttpUtil sInstance;
-    private Retrofit mRetrofit;
+    private static HttpUtil instance;
+    private WaniKaniApi api;
 
     private HttpUtil() {
-        mRetrofit = new Retrofit.Builder()
+        //https://stackoverflow.com/questions/41078866/retrofit2-authorisation-with-bearer-token
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new ServiceInterceptor()).build();
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOINT)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+        api = retrofit.create(WaniKaniApi.class);
     }
 
     public static HttpUtil getInstance() {
-        if (sInstance == null) {
-            sInstance = new HttpUtil();
+        if (instance == null) {
+            instance = new HttpUtil();
         }
-        return sInstance;
+        return instance;
     }
 
     public void getSubjects(final ResponseListener<ResponseData<Subject>> listener, String key) {
-        Call<ResponseData<Subject>> call = mRetrofit.create(WaniKaniApi.class).getSubjects("Bearer " + key);
-        call.enqueue(new Callback<ResponseData<Subject>>() {
+        api.getSubjects().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<ResponseData<Subject>>() {
             @Override
-            public void onResponse(Call<ResponseData<Subject>> call, Response<ResponseData<Subject>> response) {
-                Log.i("Http", "Got response call");
-                listener.invoke(response.body());
+            public void onNext(ResponseData<Subject> value) {
+                listener.invoke(value);
             }
 
             @Override
-            public void onFailure(Call<ResponseData<Subject>> call, Throwable t) {
-                Log.e("Http", "getSubjects failure");
-                t.printStackTrace();
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
             }
         });
     }
 
     public interface WaniKaniApi {
         @GET("subjects/")
-        Call<ResponseData<Subject>> getSubjects(@Header("Authorization") String auth);
+        Observable<ResponseData<Subject>> getSubjects();
     }
-
-//    public void fetchSubjects(CompositeDisposable compositeDisposable){
-//        compositeDisposable.add(mWaniKaniApi.getSubjects()
-//                .subscribeOn(Schedulers.computation())
-//                .map(trendsResponses -> trendsResponses.get(0))
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(trendsResponse -> view.load(trendsResponse.trends()),
-//                        throwable -> view.error(throwable)));
-//    }
 }

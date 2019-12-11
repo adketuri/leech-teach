@@ -15,21 +15,25 @@ public class PrefUtil {
 
     public static final String API_KEY = "preference_api_key";
 
-    private static PrefUtil sInstance;
-    private final SharedPreferences mPreferences;
+    private static PrefUtil instance;
+    private final SharedPreferences preferences;
 
     private PrefUtil(@NonNull final Context context) {
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static PrefUtil getInstance(@NonNull final Context context) {
-        if (sInstance == null) {
-            sInstance = new PrefUtil(context.getApplicationContext());
+    public static void init(Context context) {
+        instance = new PrefUtil(context.getApplicationContext());
+    }
+
+    public static PrefUtil getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("Call initialize() first");
         }
-        return sInstance;
+        return instance;
     }
 
     public final String apiKey() {
-        return mPreferences.getString(API_KEY, null);
+        return preferences.getString(API_KEY, null);
     }
 }
