@@ -6,14 +6,17 @@ import net.alcuria.review.http.models.ResponseData;
 import net.alcuria.review.http.models.Subject;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 
+/**
+ * Singleton for storing our webservice instance. This is a little ugly; we'd eventually prefer to
+ * substitute this out for DI with something like Dagger 2.
+ *
+ * @author Andrew Keturi
+ */
 public class HttpUtil {
 
     public static final String ENDPOINT = "https://api.wanikani.com/v2/";
@@ -40,22 +43,8 @@ public class HttpUtil {
         return instance;
     }
 
-    public void getSubjects(final ResponseListener<ResponseData<Subject>> listener, String key) {
-        api.getSubjects().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<ResponseData<Subject>>() {
-            @Override
-            public void onNext(ResponseData<Subject> value) {
-                listener.invoke(value);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
+    public WaniKaniApi getApi() {
+        return api;
     }
 
     public interface WaniKaniApi {
