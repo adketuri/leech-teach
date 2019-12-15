@@ -59,5 +59,8 @@ public class HttpUtil {
         @GET("review_statistics/")
         Observable<ResponseData<ReviewStatistic>> getReviewStatistics();
 
+        @GET("review_statistics/")
+        Observable<ResponseData<ReviewStatistic>> getReviewStatistics(@Query("page_after_id") int pageId);
+
     }
 }

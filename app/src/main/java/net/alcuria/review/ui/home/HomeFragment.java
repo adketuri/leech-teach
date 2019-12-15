@@ -27,9 +27,10 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
 
     private HomeViewModel homeViewModel;
     private SectionedRecyclerViewAdapter sectionedAdapter;
+    private SubjectRepository repository = new SubjectRepository();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new HomeViewModel(new SubjectRepository());
+        homeViewModel = new HomeViewModel(repository);
 
         View root = inflater.inflate(R.layout.section_recyclerview, container, false);
         Log.i("Home", "Creating home view");

@@ -18,7 +18,7 @@ public class HomeViewModel extends ViewModel {
     private LiveData<LeechCalculator> calculator;
 
     public HomeViewModel(SubjectRepository subjectRepository) {
-        calculator = subjectRepository.getSubjects();
+        calculator = subjectRepository.getSubjects(new LeechCalculator(), 0, 0);
     }
 
     public LiveData<LeechCalculator> getCalculator() {

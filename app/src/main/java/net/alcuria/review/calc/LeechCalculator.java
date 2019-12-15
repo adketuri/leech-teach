@@ -2,6 +2,7 @@ package net.alcuria.review.calc;
 
 import android.os.Build;
 
+import net.alcuria.review.http.models.ResponseData;
 import net.alcuria.review.http.models.ReviewStatistic;
 import net.alcuria.review.http.models.Subject;
 import net.alcuria.review.http.models.SubjectData;
@@ -13,8 +14,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import androidx.annotation.NonNull;
-
 /**
  * Contains logic for calculating leeches; depends on both {@link Subject} data and {@link ReviewStatistic} data.
  *
@@ -22,8 +21,10 @@ import androidx.annotation.NonNull;
  */
 public class LeechCalculator {
 
-    private final List<Subject> subjects;
-    private final List<ReviewStatistic> reviewStatistics;
+    private final List<Subject> subjects = new ArrayList<>();
+    private final List<ReviewStatistic> reviewStatistics = new ArrayList<>();
+    private boolean allSubjects;
+    private boolean allReviews;
     private final Map<LeechLevel, List<LeechSubject>> leechData = new HashMap<>();
     private final Map<Integer, SubjectData> subjectData = new HashMap<>();
 
@@ -33,27 +34,20 @@ public class LeechCalculator {
         leechData.put(LeechLevel.HIGH, new ArrayList<>());
     }
 
-    public LeechCalculator(@NonNull List<Subject> subjects, @NonNull List<ReviewStatistic> reviewStatistics) {
-        this.subjects = subjects;
-        this.reviewStatistics = reviewStatistics;
+    public void calculate() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             subjects.forEach(subject -> {
-                System.err.println("Adding " + subject.id + " " + subject.data);
                 subjectData.put(subject.id, subject.data);
             });
             List<ReviewStatistic> sorted = reviewStatistics.stream()
                     .filter(reviewStatistic -> reviewStatistic.data.meaningMaxStreak < 8 && reviewStatistic.data.readingMaxStreak < 8)
-                    .sorted((o1, o2) -> (o1.data.meaningIncorrect + o1.data.readingIncorrect) - (o2.data.meaningIncorrect + o2.data.readingIncorrect))
+                    .sorted((o1, o2) -> ((o2.data.meaningIncorrect + o2.data.readingIncorrect) - (o1.data.meaningIncorrect + o1.data.readingIncorrect)))
                     .collect(Collectors.toList());
             AtomicInteger index = new AtomicInteger();
             sorted.forEach(reviewStatistic -> {
                 float progress = index.getAndAdd(1) / (float) sorted.size();
-                System.err.println("Progress: " + progress);
                 for (LeechLevel level : LeechLevel.values()) {
                     if (progress < level.threshold) {
-                        System.err.println("  Adding to " + level);
-                        System.err.println(reviewStatistic.data);
-                        System.err.println(subjectData.get(reviewStatistic.data.subjectId));
                         if (subjectData.containsKey(reviewStatistic.data.subjectId)) {
                             leechData.get(level).add(new LeechSubject(reviewStatistic.data, subjectData.get(reviewStatistic.data.subjectId)));
                         }
@@ -68,6 +62,25 @@ public class LeechCalculator {
 
     public List<LeechSubject> getSubjects(LeechLevel level) {
         return leechData.get(level);
+    }
+
+    public void add(ResponseData<Subject> subjects, ResponseData<ReviewStatistic> statistics) {
+        if (!allSubjects) {
+            this.subjects.addAll(subjects.data);
+            if (subjects.pages.nextUrl == null) {
+                allSubjects = true;
+            }
+        }
+        if (!allReviews) {
+            this.reviewStatistics.addAll(statistics.data);
+            if (statistics.pages.nextUrl == null) {
+                allReviews = true;
+            }
+        }
+    }
+
+    public boolean hasAllData() {
+        return allSubjects && allReviews;
     }
 
     public enum LeechLevel {
