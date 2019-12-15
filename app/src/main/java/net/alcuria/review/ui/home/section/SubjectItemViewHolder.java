@@ -13,13 +13,16 @@ public class SubjectItemViewHolder extends RecyclerView.ViewHolder {
 
     final View rootView;
     final ImageView imgItem;
-    final TextView tvItem;
+    final TextView reading;
+    final TextView meaning;
 
     public SubjectItemViewHolder(@NonNull View view) {
         super(view);
 
         rootView = view;
         imgItem = view.findViewById(R.id.subject_image);
-        tvItem = view.findViewById(R.id.reading);
+        reading = view.findViewById(R.id.reading);
+        meaning = view.findViewById(R.id.meaning);
+
     }
 }

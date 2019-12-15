@@ -3,9 +3,11 @@ package net.alcuria.review.http.models;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Wrapper for a single subject
+ * Wrapper for a single review statistic.
+ *
+ * @author Andrew Keturi
  */
-public class Subject {
+public class ReviewStatistic {
 
     @SerializedName("id")
     public int id;
@@ -14,6 +16,5 @@ public class Subject {
     public String object;
 
     @SerializedName("data")
-    public SubjectData data;
-
+    public ReviewStatisticData data;
 }

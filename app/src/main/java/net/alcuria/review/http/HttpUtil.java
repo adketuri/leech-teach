@@ -3,6 +3,7 @@ package net.alcuria.review.http;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import net.alcuria.review.http.models.ResponseData;
+import net.alcuria.review.http.models.ReviewStatistic;
 import net.alcuria.review.http.models.Subject;
 
 import io.reactivex.Observable;
@@ -10,6 +11,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Singleton for storing our webservice instance. This is a little ugly; we'd eventually prefer to
@@ -50,5 +52,12 @@ public class HttpUtil {
     public interface WaniKaniApi {
         @GET("subjects/")
         Observable<ResponseData<Subject>> getSubjects();
+
+        @GET("subjects/")
+        Observable<ResponseData<Subject>> getSubjects(@Query("page_after_id") int pageId);
+
+        @GET("review_statistics/")
+        Observable<ResponseData<ReviewStatistic>> getReviewStatistics();
+
     }
 }

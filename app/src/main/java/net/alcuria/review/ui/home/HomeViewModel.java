@@ -1,7 +1,6 @@
 package net.alcuria.review.ui.home;
 
-import net.alcuria.review.http.models.ResponseData;
-import net.alcuria.review.http.models.Subject;
+import net.alcuria.review.calc.LeechCalculator;
 import net.alcuria.review.repository.SubjectRepository;
 
 import androidx.lifecycle.LiveData;
@@ -16,14 +15,14 @@ import androidx.lifecycle.ViewModel;
  */
 public class HomeViewModel extends ViewModel {
 
-    private LiveData<ResponseData<Subject>> subjectData;
+    private LiveData<LeechCalculator> calculator;
 
     public HomeViewModel(SubjectRepository subjectRepository) {
-        subjectData = subjectRepository.getSubjects();
+        calculator = subjectRepository.getSubjects();
     }
 
-    public LiveData<ResponseData<Subject>> getSubjectData() {
-        return subjectData;
+    public LiveData<LeechCalculator> getCalculator() {
+        return calculator;
     }
 
 }

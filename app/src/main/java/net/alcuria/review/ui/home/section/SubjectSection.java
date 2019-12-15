@@ -3,7 +3,7 @@ package net.alcuria.review.ui.home.section;
 import android.view.View;
 
 import net.alcuria.review.R;
-import net.alcuria.review.http.models.Subject;
+import net.alcuria.review.calc.LeechSubject;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 public class SubjectSection extends Section {
 
     private final String title;
-    private final List<Subject> list;
+    private final List<LeechSubject> list;
     private final ClickListener clickListener;
 
-    public SubjectSection(@NonNull final String title, @NonNull final List<Subject> list,
+    public SubjectSection(@NonNull final String title, @NonNull final List<LeechSubject> list,
                           @NonNull final ClickListener clickListener) {
         super(SectionParameters.builder()
                 .itemResourceId(R.layout.section_item)
@@ -42,19 +42,11 @@ public class SubjectSection extends Section {
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
         final SubjectItemViewHolder itemHolder = (SubjectItemViewHolder) holder;
-
-        final Subject subject = list.get(position);
-
-        itemHolder.tvItem.setText("ID" + subject.id);
+        final LeechSubject subject = list.get(position);
+        itemHolder.reading.setText(subject.getReading());
+        itemHolder.meaning.setText(subject.getMeaning());
         itemHolder.imgItem.setImageResource(R.drawable.ic_menu_camera);
-
-        itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
-                                                   @Override
-                                                   public void onClick(View v) {
-                                                       clickListener.onItemRootViewClicked(title, itemHolder.getAdapterPosition());
-                                                   }
-                                               }
-        );
+        itemHolder.rootView.setOnClickListener(v -> clickListener.onItemRootViewClicked(title, itemHolder.getAdapterPosition()));
     }
 
     @Override
