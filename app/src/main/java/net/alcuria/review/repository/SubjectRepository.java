@@ -19,6 +19,15 @@ public class SubjectRepository {
     private MutableLiveData<LeechCalculator> cachedData;
     private MutableLiveData<LeechCalculator> data;
 
+    private static SubjectRepository repository;
+
+    public static SubjectRepository instance() {
+        if (repository == null) {
+            repository = new SubjectRepository();
+        }
+        return repository;
+    }
+
     public LiveData<LeechCalculator> getSubjects(LeechCalculator calculator, int subjectPage, int reviewPage) {
         Log.i("Home", "Loading subjects " + subjectPage + " " + reviewPage);
         if (cachedData != null) {

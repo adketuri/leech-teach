@@ -40,7 +40,7 @@ public class LeechCalculator {
                 subjectData.put(subject.id, subject.data);
             });
             List<ReviewStatistic> sorted = reviewStatistics.stream()
-                    .filter(reviewStatistic -> reviewStatistic.data.meaningMaxStreak < 8 && reviewStatistic.data.readingMaxStreak < 8)
+                    .filter(reviewStatistic -> reviewStatistic.data.meaningMaxStreak < 8 && reviewStatistic.data.readingMaxStreak < 8 && reviewStatistic.data.meaningCurrentStreak < 5 && reviewStatistic.data.readingCurrentStreak < 5)
                     .sorted((o1, o2) -> ((o2.data.meaningIncorrect + o2.data.readingIncorrect) - (o1.data.meaningIncorrect + o1.data.readingIncorrect)))
                     .collect(Collectors.toList());
             AtomicInteger index = new AtomicInteger();

@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import net.alcuria.review.R;
 import net.alcuria.review.calc.LeechCalculator;
-import net.alcuria.review.repository.SubjectRepository;
 import net.alcuria.review.ui.home.section.SubjectSection;
 
 import androidx.annotation.NonNull;
@@ -25,12 +24,10 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
  */
 public class HomeFragment extends Fragment implements SubjectSection.ClickListener {
 
-    private HomeViewModel homeViewModel;
     private SectionedRecyclerViewAdapter sectionedAdapter;
-    private SubjectRepository repository = new SubjectRepository();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new HomeViewModel(repository);
+        HomeViewModel homeViewModel = new HomeViewModel();
 
         View root = inflater.inflate(R.layout.section_recyclerview, container, false);
         Log.i("Home", "Creating home view");
