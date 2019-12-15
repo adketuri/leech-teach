@@ -4,12 +4,14 @@ import android.os.Build;
 
 import net.alcuria.review.http.models.ResponseData;
 import net.alcuria.review.http.models.ReviewStatistic;
+import net.alcuria.review.http.models.ReviewStatisticData;
 import net.alcuria.review.http.models.Subject;
 import net.alcuria.review.http.models.SubjectData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -40,7 +42,7 @@ public class LeechCalculator {
                 subjectData.put(subject.id, subject.data);
             });
             List<ReviewStatistic> sorted = reviewStatistics.stream()
-                    .filter(reviewStatistic -> reviewStatistic.data.meaningMaxStreak < 8 && reviewStatistic.data.readingMaxStreak < 8 && reviewStatistic.data.meaningCurrentStreak < 5 && reviewStatistic.data.readingCurrentStreak < 5)
+                    .filter(this::activelyReviewing)
                     .sorted((o1, o2) -> ((o2.data.meaningIncorrect + o2.data.readingIncorrect) - (o1.data.meaningIncorrect + o1.data.readingIncorrect)))
                     .collect(Collectors.toList());
             AtomicInteger index = new AtomicInteger();
@@ -58,6 +60,20 @@ public class LeechCalculator {
         } else {
             // TODO \o/
         }
+    }
+
+    private boolean activelyReviewing(ReviewStatistic reviewStatistic) {
+        if (reviewStatistic.data == null) {
+            return false;  // no review data yet
+        }
+        ReviewStatisticData data = reviewStatistic.data;
+        if (data.meaningMaxStreak < 2 && data.readingMaxStreak < 2) {
+            return false; // too early to be considered a leech
+        }
+        if (data.readingMaxStreak > 6 && data.meaningMaxStreak > 6) {
+            return false; // either we've burned it or it's coming up for reviews. GLHF!
+        }
+        return data.meaningIncorrect + data.readingIncorrect > 6; // still learning, not a leech (yet)
     }
 
     public List<LeechSubject> getSubjects(LeechLevel level) {
@@ -96,8 +112,8 @@ public class LeechCalculator {
             this.threshold = threshold;
         }
 
-        public String getTitle() {
-            return title;
+        public String getTitle(int size) {
+            return String.format(Locale.ENGLISH, "%s (%d)", title, size);
         }
 
         public float getThreshold() {

@@ -2,6 +2,8 @@ package net.alcuria.review.ui.home.section;
 
 import android.view.View;
 
+import com.bumptech.glide.Glide;
+
 import net.alcuria.review.R;
 import net.alcuria.review.calc.LeechSubject;
 
@@ -45,7 +47,12 @@ public class SubjectSection extends Section {
         final LeechSubject subject = list.get(position);
         itemHolder.reading.setText(subject.getReading());
         itemHolder.meaning.setText(subject.getMeaning());
-        itemHolder.imgItem.setImageResource(R.drawable.ic_menu_camera);
+        if (subject.hasCharacterImage()) {
+            Glide.with(itemHolder.itemView).load(subject.getCharacterUrl()).into(itemHolder.imgItem);
+            itemHolder.characters.setText("");
+        } else {
+            itemHolder.characters.setText(subject.getCharacters());
+        }
         itemHolder.rootView.setOnClickListener(v -> clickListener.onItemRootViewClicked(title, itemHolder.getAdapterPosition()));
     }
 

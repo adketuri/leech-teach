@@ -52,6 +52,6 @@ public class ReviewStatisticData {
     @NonNull
     @Override
     public String toString() {
-        return String.format(Locale.ENGLISH, "<ReviewStatisticData subjectId=%d reading+meaning incorrect=%d", subjectId, readingIncorrect + meaningIncorrect);
+        return String.format(Locale.ENGLISH, "<ReviewStatisticData subjectId=%d incorrect=%d (RS=%d/%d, MS=%d/%d)>", subjectId, readingIncorrect + meaningIncorrect, readingCurrentStreak, readingMaxStreak, meaningCurrentStreak, meaningMaxStreak);
     }
 }

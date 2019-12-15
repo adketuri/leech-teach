@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
         sectionedAdapter = new SectionedRecyclerViewAdapter();
         homeViewModel.getCalculator().observe(this, calculator -> {
             for (LeechCalculator.LeechLevel level : LeechCalculator.LeechLevel.values()) {
-                sectionedAdapter.addSection(new SubjectSection(level.getTitle(), calculator.getSubjects(level), HomeFragment.this));
+                sectionedAdapter.addSection(new SubjectSection(level.getTitle(calculator.getSubjects(level).size()), calculator.getSubjects(level), HomeFragment.this));
             }
             sectionedAdapter.notifyDataSetChanged();
             Log.i("Home", "Data set changed");

@@ -24,6 +24,9 @@ public class SubjectData {
     @SerializedName("meanings")
     public List<Meaning> meanings;
 
+    @SerializedName("readings")
+    public List<Reading> readings;
+
     @SerializedName("character_images")
     public List<CharacterImage> characterImages;
 

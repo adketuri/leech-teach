@@ -2,7 +2,7 @@ package net.alcuria.review.http.models;
 
 import com.google.gson.annotations.SerializedName;
 
-class CharacterImage {
+public class CharacterImage {
 
     @SerializedName("url")
     public String url;

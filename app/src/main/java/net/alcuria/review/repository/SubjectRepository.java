@@ -14,12 +14,19 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * A repository for holding application data.
+ *
+ * @author Andrew Keturi
+ */
 public class SubjectRepository {
 
+    private static SubjectRepository repository;
     private MutableLiveData<LeechCalculator> cachedData;
     private MutableLiveData<LeechCalculator> data;
 
-    private static SubjectRepository repository;
+    private SubjectRepository() {
+    }
 
     public static SubjectRepository instance() {
         if (repository == null) {
@@ -65,6 +72,4 @@ public class SubjectRepository {
         });
         return data;
     }
-
-
 }
