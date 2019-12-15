@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class SubjectData {
+public class SubjectData {
 
     @SerializedName("level")
     public int level;
