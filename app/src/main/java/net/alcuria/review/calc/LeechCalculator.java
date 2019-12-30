@@ -38,9 +38,7 @@ public class LeechCalculator {
 
     public void calculate() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            subjects.forEach(subject -> {
-                subjectData.put(subject.id, subject.data);
-            });
+            subjects.forEach(subject -> subjectData.put(subject.id, subject.data));
             List<ReviewStatistic> sorted = reviewStatistics.stream()
                     .filter(this::activelyReviewing)
                     .sorted((o1, o2) -> ((o2.data.meaningIncorrect + o2.data.readingIncorrect) - (o1.data.meaningIncorrect + o1.data.readingIncorrect)))
@@ -80,7 +78,7 @@ public class LeechCalculator {
         return leechData.get(level);
     }
 
-    public void add(ResponseData<Subject> subjects, ResponseData<ReviewStatistic> statistics) {
+    public void calculateFromLeechSubjects(ResponseData<Subject> subjects, ResponseData<ReviewStatistic> statistics) {
         if (!allSubjects) {
             this.subjects.addAll(subjects.data);
             if (subjects.pages.nextUrl == null) {
@@ -99,10 +97,22 @@ public class LeechCalculator {
         return allSubjects && allReviews;
     }
 
-    public void add(List<LeechSubject> subjects) {
-        for (LeechLevel level : LeechLevel.values()){
-            leechData.get(level).addAll(subjects);
+    public void calculateFromLeechSubjects(List<LeechSubject> leechSubjects) {
+        subjects.clear();
+        reviewStatistics.clear();
+        for (LeechSubject leechSubject : leechSubjects) {
+            subjects.add(new Subject(leechSubject.id, leechSubject.subject));
+            reviewStatistics.add(new ReviewStatistic(leechSubject.id, leechSubject.review));
         }
+        calculate();
+    }
+
+    public List<LeechSubject> getAllSubjects() {
+        List<LeechSubject> all = new ArrayList<>();
+        for (LeechLevel level : LeechLevel.values()) {
+            all.addAll(getSubjects(level));
+        }
+        return all;
     }
 
     public enum LeechLevel {

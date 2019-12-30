@@ -16,4 +16,11 @@ public class Subject {
     @SerializedName("data")
     public SubjectData data;
 
+    public Subject() {
+    }
+
+    public Subject(int id, SubjectData data) {
+        this.id = id;
+        this.data = data;
+    }
 }

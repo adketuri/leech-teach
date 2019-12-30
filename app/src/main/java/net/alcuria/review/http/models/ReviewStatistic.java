@@ -17,4 +17,12 @@ public class ReviewStatistic {
 
     @SerializedName("data")
     public ReviewStatisticData data;
+
+    public ReviewStatistic() {
+    }
+
+    public ReviewStatistic(int id, ReviewStatisticData data) {
+        this.id = id;
+        this.data = data;
+    }
 }

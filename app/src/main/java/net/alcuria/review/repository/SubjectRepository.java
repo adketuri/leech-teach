@@ -15,9 +15,8 @@ import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subscribers.DisposableSubscriber;
 
 /**
  * A repository for holding application data.
@@ -31,7 +30,18 @@ public class SubjectRepository {
     private MutableLiveData<LeechCalculator> data;
     private CompositeDisposable disposables = new CompositeDisposable();
 
-    private SubjectRepository() {}
+    private SubjectRepository() {
+        Log.i("SubjectRepository", "Creating");
+        disposables.add(LeechDatabase.getInstance().leechSubject().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(leechSubjects -> {
+            Log.i("SubjectRepository", "Fetched leech subjects from DB, rows=" + leechSubjects.size());
+            LeechCalculator calculator = new LeechCalculator();
+            calculator.calculateFromLeechSubjects(leechSubjects);
+            setLiveData(calculator);
+        }, t -> {
+            Log.e("SubjectRepository", "Error fetching leech subjects from db");
+            t.printStackTrace();
+        }));
+    }
 
     public static SubjectRepository instance() {
         if (repository == null) {
@@ -40,96 +50,16 @@ public class SubjectRepository {
         return repository;
     }
 
-    public void onDestroy (){
+    public void onDestroy() {
+        Log.i("SubjectRepository", "Disposing all disposables");
         disposables.dispose();
     }
 
     public LiveData<LeechCalculator> getSubjects(LeechCalculator calculator, int subjectPage, int reviewPage) {
-        Log.i("Home", "Loading subjects " + subjectPage + " " + reviewPage);
-        if (cachedData != null) {
-            return cachedData;
-        }
+        Log.i("SubjectRepository", "Fetching subjects " + subjectPage + " " + reviewPage);
         if (data == null) {
             data = new MutableLiveData<>();
         }
-
-        disposables.add(LeechDatabase.getInstance().leechSubject().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<LeechSubject>>() {
-            @Override
-            public void onNext(List<LeechSubject> leechSubjects) {
-                System.err.println("onNext "  + leechSubjects);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                System.err.println("Error!");
-                t.printStackTrace();
-            }
-
-            @Override
-            public void onComplete() {
-                System.err.println("complete");
-            }
-        }));
-
-//        Flowable<List<LeechSubject>> db = LeechDatabase.getInstance().leechSubject().getAll();
-//        Disposable disposable = Flowable.just(db)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<Flowable<List<LeechSubject>>>() {
-//                    @Override
-//                    public void accept(Flowable<List<LeechSubject>> listFlowable) throws Exception {
-//                        System.err.println("got item!!");
-//                        List<LeechSubject> subjects = listFlowable.blockingFirst();
-//                        LeechCalculator calc = new LeechCalculator();
-//                        calc.add(subjects);
-//                        data.setValue(calc);
-//                        if (cachedData == null) {
-//                            cachedData = new MutableLiveData<>();
-//                        }
-//                        cachedData.setValue(calc);
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        System.err.println("Error!");
-//                        throwable.printStackTrace();
-//                    }
-//                }, new Action() {
-//                    @Override
-//                    public void run() throws Exception {
-//                        System.err.println("oncomplete");
-//                    }
-//                }, new Consumer<Subscription>() {
-//                    @Override
-//                    public void accept(Subscription subscription) throws Exception {
-//                        System.err.println("on subscribe");
-//                    }
-//                });
-//        disposables.add(disposable);
-
-//        Maybe.just(LeechDatabase.getInstance().leechSubject().getAll()).observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Maybe<List<LeechSubject>>>() {
-//            @Override
-//            public void accept(Maybe<List<LeechSubject>> listMaybe) throws Exception {
-//                System.err.println("got item!!");
-//                List<LeechSubject> subjects = listMaybe.blockingGet();
-//                LeechCalculator calc = new LeechCalculator();
-//                calc.add(subjects);
-//                data.setValue(calc);
-//                if (cachedData == null) {
-//                    cachedData = new MutableLiveData<>();
-//                }
-//                cachedData.setValue(calc);
-//
-//            }
-//        }, new Consumer<Throwable>() {
-//            @Override
-//            public void accept(Throwable throwable) throws Exception {
-//                System.err.println("Error!");
-//                throwable.printStackTrace();
-//            }
-//        });
-//        return data;
-
         AtomicInteger nextSubjectPage = new AtomicInteger(subjectPage);
         AtomicInteger nextReviewPage = new AtomicInteger(reviewPage);
         disposables.add(Observable.zip(
@@ -142,28 +72,46 @@ public class SubjectRepository {
                     if (reviewStatisticResponseData.pages.nextUrl != null) {
                         nextReviewPage.set(Integer.parseInt(reviewStatisticResponseData.pages.nextUrl.split("=")[1]));
                     }
-                    calculator.add(subjectResponseData, reviewStatisticResponseData);
-                    if (calculator.hasAllData()){
-                        System.err.println("Deleting all data");
-                        LeechDatabase.getInstance().leechSubject().deleteAll();
-                        System.err.println("Now inserting");
-                        LeechDatabase.getInstance().leechSubject().insertAll(calculator.getSubjects(LeechCalculator.LeechLevel.HIGH));
-                    }
+                    calculator.calculateFromLeechSubjects(subjectResponseData, reviewStatisticResponseData);
                     return calculator;
                 }
-        ).observeOn(AndroidSchedulers.mainThread()).subscribe(calc -> {
+        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(calc -> {
             if (calc.hasAllData()) {
                 calc.calculate();
-                data.setValue(calc);
-                if (cachedData == null) {
-                    cachedData = new MutableLiveData<>();
-                }
-                cachedData.setValue(calc);
+                // TODO: is this necessary to delete? since we replace on inserting duplicates, maybe fine not to
+//                Log.i("SubjectRepository", "Deleting existing data from leech db");
+//                LeechDatabase.getInstance().leechSubject().deleteAll();
+                List<LeechSubject> subjects = calculator.getAllSubjects();
+                Log.i("SubjectRepository", "Inserting leech subjects into database, size=" + subjects.size());
+                disposables.add(LeechDatabase.getInstance().leechSubject().insertAll(subjects).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        Log.i("SubjectRepository", "Leech insertion completed successfully");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("SubjectRepository", "Error inserting");
+                        e.printStackTrace();
+                    }
+                }));
+                setLiveData(calc);
             } else {
-                System.err.println("Fetching more data " + nextSubjectPage.get() + " " + nextReviewPage.get());
+                Log.i("SubjectRepository", "Fetching more data " + nextSubjectPage.get() + " " + nextReviewPage.get());
                 getSubjects(calc, nextSubjectPage.get(), nextReviewPage.get());
             }
         }));
         return data;
+    }
+
+    private void setLiveData(LeechCalculator calc) {
+        if (data == null) {
+            data = new MutableLiveData<>();
+        }
+        data.setValue(calc);
+        if (cachedData == null) {
+            cachedData = new MutableLiveData<>();
+        }
+        cachedData.setValue(calc);
     }
 }
