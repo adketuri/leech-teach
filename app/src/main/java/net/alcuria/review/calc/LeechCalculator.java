@@ -99,6 +99,12 @@ public class LeechCalculator {
         return allSubjects && allReviews;
     }
 
+    public void add(List<LeechSubject> subjects) {
+        for (LeechLevel level : LeechLevel.values()){
+            leechData.get(level).addAll(subjects);
+        }
+    }
+
     public enum LeechLevel {
         HIGH("High Priority", 0.15f),
         MEDIUM("Medium Priority", 0.50f),

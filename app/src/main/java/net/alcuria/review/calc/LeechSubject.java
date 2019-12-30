@@ -1,19 +1,41 @@
 package net.alcuria.review.calc;
 
+import net.alcuria.review.calc.converter.ReviewStatisticTypeConverter;
 import net.alcuria.review.http.models.ReviewStatisticData;
 import net.alcuria.review.http.models.SubjectData;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 /**
  * Subject data with associated review statistics.
  */
+@Entity
 public class LeechSubject {
 
-    private final ReviewStatisticData review;
-    private final SubjectData subject;
+    @PrimaryKey
+    public int id;
+    @TypeConverters(ReviewStatisticTypeConverter.class)
+    public ReviewStatisticData review;
+    @TypeConverters(ReviewStatisticTypeConverter.class)
+    public SubjectData subject;
+
+//    @PrimaryKey
+//    public final int id;
+//
+//    @ColumnInfo(name = "characters")
+//    public final String characters;
+
+
 
     public LeechSubject(ReviewStatisticData review, SubjectData subject) {
         this.review = review;
         this.subject = subject;
+        this.id = review.subjectId;
+        // ---
+//        this.id = review.subjectId;
+//        this.characters = subject.characters;
     }
 
     public boolean hasCharacterImage() {

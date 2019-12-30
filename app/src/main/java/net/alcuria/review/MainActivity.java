@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
+import net.alcuria.review.calc.database.LeechDatabase;
 import net.alcuria.review.util.PrefUtil;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PrefUtil.init(getApplicationContext());
+        LeechDatabase.init(getApplicationContext());
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
