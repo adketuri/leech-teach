@@ -32,13 +32,16 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
     private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new HomeViewModel();
+        if (homeViewModel == null) {
+            homeViewModel = new HomeViewModel();
+        }
 
         View root = inflater.inflate(R.layout.section_recyclerview, container, false);
         Log.i("Home", "Creating home view");
 
         sectionedAdapter = new SectionedRecyclerViewAdapter();
         homeViewModel.getCalculator().observe(this, calculator -> {
+            sectionedAdapter.removeAllSections();
             for (LeechCalculator.LeechLevel level : LeechCalculator.LeechLevel.values()) {
                 sectionedAdapter.addSection(new SubjectSection(level.getTitle(calculator.getSubjects(level).size()), calculator.getSubjects(level), HomeFragment.this));
             }
