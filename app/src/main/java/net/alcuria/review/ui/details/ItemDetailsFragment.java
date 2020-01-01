@@ -41,8 +41,10 @@ public class ItemDetailsFragment extends Fragment {
             Log.i(TAG, "onViewCreated: " + subject);
             final TextView character = view.findViewById(R.id.character_detail);
             character.setText(subject.getCharacters());
-
-
+            final TextView reading = view.findViewById(R.id.reading_detail);
+            reading.setText(subject.getReading());
+            final TextView meaning = view.findViewById(R.id.meaning_detail);
+            meaning.setText(subject.getMeaning());
         }
     }
 }
