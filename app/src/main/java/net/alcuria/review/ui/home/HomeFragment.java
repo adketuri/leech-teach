@@ -5,14 +5,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import net.alcuria.review.R;
 import net.alcuria.review.calc.LeechCalculator;
 import net.alcuria.review.ui.home.section.SubjectSection;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
@@ -25,6 +27,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 public class HomeFragment extends Fragment implements SubjectSection.ClickListener {
 
     private SectionedRecyclerViewAdapter sectionedAdapter;
+    private NavController navController;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = new HomeViewModel();
@@ -48,11 +51,19 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+
+    }
+
+    @Override
     public void onItemRootViewClicked(@NonNull String sectionTitle, int itemAdapterPosition) {
-        Toast.makeText(
-                getContext(),
-                String.format("Clicked on position #%s of Section %s", sectionedAdapter.getPositionInSection(itemAdapterPosition), sectionTitle),
-                Toast.LENGTH_SHORT
-        ).show();
+        navController.navigate(R.id.action_nav_home_to_item_details);
+//        Toast.makeText(
+//                getContext(),
+//                String.format("Clicked on position #%s of Section %s", sectionedAdapter.getPositionInSection(itemAdapterPosition), sectionTitle),
+//                Toast.LENGTH_SHORT
+//        ).show();
     }
 }

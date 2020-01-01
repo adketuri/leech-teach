@@ -9,25 +9,11 @@
         android:id="@+id/nav_home"
         android:name="net.alcuria.review.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="net.alcuria.review.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="net.alcuria.review.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
-        android:id="@+id/nav_tools"
-        android:name="net.alcuria.review.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_nav_home_to_item_details"
+            app:destination="@id/item_details" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_settings"
@@ -46,4 +32,14 @@
         android:name="net.alcuria.review.ui.send.SendFragment"
         android:label="@string/menu_send"
         tools:layout="@layout/fragment_send" />
+
+    <fragment
+        android:id="@+id/item_details"
+        android:name="net.alcuria.review.ui.details.ItemDetailsFragment"
+        android:label="fragment_item_details"
+        tools:layout="@layout/fragment_item_details">
+        <argument android:name="subject" />
+
+    </fragment>
+
 </navigation>
