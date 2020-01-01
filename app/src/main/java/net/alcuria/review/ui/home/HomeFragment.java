@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import net.alcuria.review.R;
 import net.alcuria.review.calc.LeechCalculator;
+import net.alcuria.review.calc.LeechSubject;
 import net.alcuria.review.ui.home.section.SubjectSection;
 
 import androidx.annotation.NonNull;
@@ -28,9 +29,10 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
 
     private SectionedRecyclerViewAdapter sectionedAdapter;
     private NavController navController;
+    private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel = new HomeViewModel();
+        homeViewModel = new HomeViewModel();
 
         View root = inflater.inflate(R.layout.section_recyclerview, container, false);
         Log.i("Home", "Creating home view");
@@ -59,11 +61,8 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
 
     @Override
     public void onItemRootViewClicked(@NonNull String sectionTitle, int itemAdapterPosition) {
-        navController.navigate(R.id.action_nav_home_to_item_details);
-//        Toast.makeText(
-//                getContext(),
-//                String.format("Clicked on position #%s of Section %s", sectionedAdapter.getPositionInSection(itemAdapterPosition), sectionTitle),
-//                Toast.LENGTH_SHORT
-//        ).show();
+        LeechSubject subject = homeViewModel.getCalculator().getValue().getSubjects(LeechCalculator.LeechLevel.from(sectionTitle)).get(itemAdapterPosition);
+        HomeFragmentDirections.ActionNavHomeToItemDetails action = HomeFragmentDirections.actionNavHomeToItemDetails(subject);
+        navController.navigate(action);
     }
 }

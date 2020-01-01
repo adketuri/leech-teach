@@ -1,5 +1,8 @@
 package net.alcuria.review.calc;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import net.alcuria.review.calc.converter.ReviewStatisticTypeConverter;
 import net.alcuria.review.http.models.ReviewStatisticData;
 import net.alcuria.review.http.models.SubjectData;
@@ -12,7 +15,7 @@ import androidx.room.TypeConverters;
  * Subject data with associated review statistics.
  */
 @Entity
-public class LeechSubject {
+public class LeechSubject implements Parcelable {
 
     @PrimaryKey
     public int id;
@@ -56,5 +59,15 @@ public class LeechSubject {
 
     public String getCharacterUrl() {
         return subject.characterImages.get(0).url;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

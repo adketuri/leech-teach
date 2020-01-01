@@ -36,9 +36,11 @@
     <fragment
         android:id="@+id/item_details"
         android:name="net.alcuria.review.ui.details.ItemDetailsFragment"
-        android:label="fragment_item_details"
+        android:label="@string/item_details"
         tools:layout="@layout/fragment_item_details">
-        <argument android:name="subject" />
+        <argument
+            android:name="subject"
+            app:argType="net.alcuria.review.calc.LeechSubject" />
 
     </fragment>
 

@@ -128,6 +128,15 @@ public class LeechCalculator {
             this.threshold = threshold;
         }
 
+        public static LeechLevel from(String title) {
+            for (LeechLevel level : LeechLevel.values()) {
+                if (title.contains(level.title)) {
+                    return level;
+                }
+            }
+            throw new IllegalArgumentException("No level with title " + title);
+        }
+
         public String getTitle(int size) {
             return String.format(Locale.ENGLISH, "%s (%d)", title, size);
         }
