@@ -100,7 +100,7 @@ public class SubjectRepository {
                 Log.i("SubjectRepository", "Fetching more data " + nextSubjectPage.get() + " " + nextReviewPage.get());
                 getSubjects(calc, nextSubjectPage.get(), nextReviewPage.get());
             }
-        }));
+        }, throwable -> throwable.printStackTrace()));
         return data;
     }
 
