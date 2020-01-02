@@ -20,7 +20,7 @@ public class ReviewStatisticData {
     public int subjectId;
 
     @SerializedName("subject_type")
-    public SubjectType subjectType;
+    public String subjectType;
 
     @SerializedName("meaning_correct")
     public int meaningCorrect;

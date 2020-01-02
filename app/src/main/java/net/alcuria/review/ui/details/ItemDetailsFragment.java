@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import net.alcuria.review.R;
 import net.alcuria.review.calc.LeechSubject;
+import net.alcuria.review.http.models.SubjectType;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +46,29 @@ public class ItemDetailsFragment extends Fragment {
             reading.setText(subject.getReading());
             final TextView meaning = view.findViewById(R.id.meaning_detail);
             meaning.setText(subject.getMeaning());
+            setHeaders(view);
+            ((TextView) view.findViewById(R.id.reading_mnemonic)).setText(subject.subject.readingMnemonic);
+            view.findViewById(R.id.hint_reading).<TextView>findViewById(R.id.hint_text).setText(subject.subject.readingHint);
+            ((TextView) view.findViewById(R.id.meaning_mnemonic)).setText(subject.subject.meaningMnemonic);
+            view.findViewById(R.id.hint_meaning).<TextView>findViewById(R.id.hint_text).setText(subject.subject.meaningHint);
+            switch (SubjectType.from(subject.review.subjectType)) {
+                case KANJI:
+                    break;
+                case VOCABULARY:
+                    view.<TextView>findViewById(R.id.radical_combination).setText(subject.getComponentSubjects());
+                    break;
+                case RADICAL:
+                    break;
+            }
+        }
+    }
+
+    private void setHeaders(@NonNull View view) {
+        int[] headerIds = {R.id.radical_combination_header, R.id.meaning_mnemonic_header, R.id.reading_mnemonic_header, R.id.similar_kanji_header, R.id.found_in_vocabulary_header};
+        int[] headerText = {R.string.header_radical_combinations, R.string.header_meaning_mnemonic, R.string.header_reading_mnemonic, R.string.header_visually_similar_kanji, R.string.header_vocab_containing_this_kanji};
+        for (int i = 0; i < headerIds.length; i++) {
+            final TextView header = view.findViewById(headerIds[i]).findViewById(R.id.header_text);
+            header.setText(headerText[i]);
         }
     }
 }

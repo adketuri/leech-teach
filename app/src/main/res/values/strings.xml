@@ -20,6 +20,11 @@
     <string name="preference_api_key_summary">Enter your WaniKani API v2 key here</string>
     <string name="preference_api_key_title">Enter your API key</string>
     <string name="item_details">Item Details</string>
-    <string name="hint">❓<b>Hints</b></string>
+    <string name="hint">❓Hints</string>
+    <string name="header_radical_combinations">Radical Combinations</string>
+    <string name="header_meaning_mnemonic">Meaning Mnemonic</string>
+    <string name="header_reading_mnemonic">Reading Mnemonic</string>
+    <string name="header_visually_similar_kanji">Visually Similar Kanji</string>
+    <string name="header_vocab_containing_this_kanji">Vocab Containing This Kanji</string>
 
 </resources>

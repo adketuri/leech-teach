@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
 
     @Override
     public void onItemRootViewClicked(@NonNull String sectionTitle, int itemAdapterPosition) {
-        LeechSubject subject = homeViewModel.getCalculator().getValue().getSubjects(LeechCalculator.LeechLevel.from(sectionTitle)).get(itemAdapterPosition);
+        LeechSubject subject = homeViewModel.getCalculator().getValue().getSubjects(LeechCalculator.LeechLevel.from(sectionTitle)).get(itemAdapterPosition - 1);
         HomeFragmentDirections.ActionNavHomeToItemDetails action = HomeFragmentDirections.actionNavHomeToItemDetails(subject);
         navController.navigate(action);
     }

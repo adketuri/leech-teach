@@ -41,6 +41,22 @@ public class LeechSubject implements Parcelable {
 //        this.characters = subject.characters;
     }
 
+    public static final Creator<LeechSubject> CREATOR = new Creator<LeechSubject>() {
+        @Override
+        public LeechSubject createFromParcel(Parcel in) {
+            return new LeechSubject(in);
+        }
+
+        @Override
+        public LeechSubject[] newArray(int size) {
+            return new LeechSubject[size];
+        }
+    };
+
+    protected LeechSubject(Parcel in) {
+        id = in.readInt();
+    }
+
     public boolean hasCharacterImage() {
         return subject.characterImages != null && subject.characterImages.size() > 0;
     }
@@ -68,6 +84,11 @@ public class LeechSubject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+    }
 
+    public String getComponentSubjects() {
+        return "Components";
+//        return subject.componentSubjectIds... fetch from component map;
     }
 }

@@ -30,6 +30,24 @@ public class SubjectData {
     @SerializedName("character_images")
     public List<CharacterImage> characterImages;
 
+    @SerializedName("component_subject_ids")
+    public List<Integer> componentSubjectIds;
+
+    @SerializedName("amalgamation_subject_ids")
+    public List<Integer> amalgamationSubjectIds;
+
+    @SerializedName("meaning_mnemonic")
+    public String meaningMnemonic;
+
+    @SerializedName("reading_mnemonic")
+    public String readingMnemonic;
+
+    @SerializedName("meaning_hint")
+    public String meaningHint;
+
+    @SerializedName("reading_hint")
+    public String readingHint;
+
     @NonNull
     @Override
     public String toString() {
