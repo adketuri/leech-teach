@@ -43,4 +43,112 @@
         android:text="Meaning"
         app:layout_constraintStart_toStartOf="@+id/reading_detail"
         app:layout_constraintTop_toBottomOf="@+id/reading_detail" />
+
+    <include
+        android:id="@+id/radical_combination_header"
+        layout="@layout/details_header"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/character_detail"
+        app:layout_constraintTop_toBottomOf="@id/character_detail" />
+
+    <TextView
+        android:id="@+id/radical_combination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Radical Combination List"
+        app:layout_constraintStart_toStartOf="@+id/radical_combination_header"
+        app:layout_constraintTop_toBottomOf="@+id/radical_combination_header" />
+
+    <include
+        android:id="@+id/meaning_mnemonic_header"
+        layout="@layout/details_header"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/radical_combination"
+        app:layout_constraintTop_toBottomOf="@id/radical_combination" />
+
+    <TextView
+        android:id="@+id/meaning_mnemonic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Meaning Mnemonic Details"
+        app:layout_constraintStart_toStartOf="@+id/meaning_mnemonic_header"
+        app:layout_constraintTop_toBottomOf="@+id/meaning_mnemonic_header" />
+
+    <include
+        android:id="@+id/hint_meaning"
+        layout="@layout/hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/meaning_mnemonic"
+        app:layout_constraintTop_toBottomOf="@id/meaning_mnemonic" />
+
+    <include
+        android:id="@+id/reading_mnemonic_header"
+        layout="@layout/details_header"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/hint_meaning"
+        app:layout_constraintTop_toBottomOf="@id/hint_meaning" />
+
+    <TextView
+        android:id="@+id/reading_mnemonic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reading Mnemonic Details"
+        app:layout_constraintStart_toStartOf="@+id/reading_mnemonic_header"
+        app:layout_constraintTop_toBottomOf="@+id/reading_mnemonic_header" />
+
+    <include
+        android:id="@+id/hint_reading"
+        layout="@layout/hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/reading_mnemonic"
+        app:layout_constraintTop_toBottomOf="@id/reading_mnemonic" />
+
+    <include
+        android:id="@+id/similar_kanji_header"
+        layout="@layout/details_header"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/hint_reading"
+        app:layout_constraintTop_toBottomOf="@id/hint_reading" />
+
+    <TextView
+        android:id="@+id/similar_kanji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List of visually similar kanji"
+        app:layout_constraintStart_toStartOf="@+id/similar_kanji_header"
+        app:layout_constraintTop_toBottomOf="@+id/similar_kanji_header" />
+
+    <include
+        android:id="@+id/found_in_vocabulary_header"
+        layout="@layout/details_header"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/similar_kanji"
+        app:layout_constraintTop_toBottomOf="@id/similar_kanji" />
+
+    <TextView
+        android:id="@+id/found_in_vocabulary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List vocab containing this kanji"
+        app:layout_constraintStart_toStartOf="@+id/found_in_vocabulary_header"
+        app:layout_constraintTop_toBottomOf="@+id/found_in_vocabulary_header" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

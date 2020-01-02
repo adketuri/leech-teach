@@ -6,7 +6,6 @@
     <string name="nav_header_subtitle">v0.0.1</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -20,9 +19,7 @@
     <string name="preference_api_key">API Key</string>
     <string name="preference_api_key_summary">Enter your WaniKani API v2 key here</string>
     <string name="preference_api_key_title">Enter your API key</string>
-
     <string name="item_details">Item Details</string>
+    <string name="hint">❓<b>Hints</b></string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
