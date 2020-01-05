@@ -23,7 +23,7 @@ public interface LeechSubjectDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insert(LeechSubject subject);
 
-    @Query("DELETE FROM leechsubject")
+    @Query("DELETE FROM LeechSubject")
     void deleteAll();
 
 }

@@ -5,11 +5,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import net.alcuria.review.R;
 import net.alcuria.review.calc.LeechSubject;
 import net.alcuria.review.http.models.SubjectType;
+import net.alcuria.review.util.PrefUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +20,6 @@ import androidx.fragment.app.Fragment;
 public class ItemDetailsFragment extends Fragment {
 
     private static final String TAG = "ItemDetailsFragment";
-    private LeechSubject subject;
 
     public ItemDetailsFragment() {
     }
@@ -60,7 +61,19 @@ public class ItemDetailsFragment extends Fragment {
                 case RADICAL:
                     break;
             }
+            updateActionButton(view, subject);
         }
+    }
+
+    private void updateActionButton(View view, LeechSubject subject) {
+        Button button = view.findViewById(R.id.add_remove_review);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.err.println(subject.id + " is being added");
+                PrefUtil.getInstance().addReview(subject.id);
+            }
+        });
     }
 
     private void setHeaders(@NonNull View view) {
