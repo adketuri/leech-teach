@@ -8,24 +8,33 @@ import android.view.ViewGroup;
 
 import net.alcuria.review.R;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ReviewQuizQuestionFragment extends Fragment {
 
-
     public ReviewQuizQuestionFragment() {
-        // Required empty public constructor
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_review_quiz_question, container, false);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_review_quiz_question, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.show_answer_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(ReviewQuizQuestionFragmentDirections.actionQuestionFragmentToAnswerFragment());
+            }
+        });
     }
 
 }

@@ -16,6 +16,7 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,5 +37,11 @@ public class ReviewOverviewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Set<Integer> reviews = PrefUtil.getInstance().reviews();
         view.<TextView>findViewById(R.id.review_description).setText(String.format(Locale.ENGLISH, "You have %d items to review", reviews.size()));
+        view.findViewById(R.id.start_reviews_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(ReviewOverviewFragmentDirections.actionNavReviewToReviewQuizQuestionFragment());
+            }
+        });
     }
 }

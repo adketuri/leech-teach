@@ -59,7 +59,6 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-
     }
 
     @Override
