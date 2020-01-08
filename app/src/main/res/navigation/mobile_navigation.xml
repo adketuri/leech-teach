@@ -12,9 +12,7 @@
         tools:layout="@layout/fragment_review_overview">
         <action
             android:id="@+id/action_nav_review_to_reviewQuizQuestionFragment"
-            app:destination="@id/question_fragment"
-            app:popUpTo="@id/nav_review"
-            app:popUpToInclusive="true" />
+            app:destination="@id/question_fragment" />
     </fragment>
 
     <fragment
@@ -25,7 +23,7 @@
         <action
             android:id="@+id/action_question_fragment_to_answer_fragment"
             app:destination="@id/answer_fragment"
-            app:popUpTo="@id/nav_review"
+            app:popUpTo="@id/answer_fragment"
             app:popUpToInclusive="true" />
     </fragment>
 
@@ -37,12 +35,12 @@
         <action
             android:id="@+id/action_answer_fragment_to_question_fragment"
             app:destination="@id/question_fragment"
-            app:popUpTo="@id/nav_review"
+            app:popUpTo="@id/question_fragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_answer_fragment_to_nav_review"
             app:destination="@id/nav_review"
-            app:popUpTo="@id/nav_review"
+            app:popUpTo="@id/question_fragment"
             app:popUpToInclusive="true" />
     </fragment>
 
