@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.alcuria.review.R;
+import net.alcuria.review.quiz.QuizManager;
 import net.alcuria.review.util.PrefUtil;
 
 import java.util.Locale;
@@ -16,6 +17,7 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 
 /**
@@ -23,8 +25,21 @@ import androidx.navigation.Navigation;
  */
 public class ReviewOverviewFragment extends Fragment {
 
+    private ReviewOverviewViewModel reviewOverviewViewModel;
 
     public ReviewOverviewFragment() {
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        reviewOverviewViewModel = new ReviewOverviewViewModel();
+        reviewOverviewViewModel.getQuizManager().observe(this, new Observer<QuizManager>() {
+            @Override
+            public void onChanged(QuizManager quizManager) {
+                System.err.println("UPDATE VIEW");
+            }
+        });
     }
 
     @Override

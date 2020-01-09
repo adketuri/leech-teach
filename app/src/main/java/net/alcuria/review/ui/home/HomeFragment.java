@@ -31,6 +31,12 @@ public class HomeFragment extends Fragment implements SubjectSection.ClickListen
     private NavController navController;
     private HomeViewModel homeViewModel;
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (homeViewModel == null) {
             homeViewModel = new HomeViewModel();
